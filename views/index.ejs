@@ -1,0 +1,59 @@
+<%- include ('partials/header.ejs') %>
+<body>
+    <main>
+        <h1>DatabaseTest</h1>
+
+        <form action="/admins">
+            <br><br>
+            <button>Show admins</button>
+        </form>
+        <form action="/cart">
+            <br><br>
+            <button>Show cart</button>
+        </form>
+        <form action="/inventory">
+            <br><br>
+            <button>Show inventory</button>
+        </form>
+                <form action="/search">
+            <br><br>
+            <button>Show Products</button>
+        </form>
+        <br><br>
+        <h2>DatabaseUpdateTest(adminTableOnly)</h2>
+        <form action="/api/updateAdmins">
+            <input type="text" placeholder = "Type Username" name ="username"/>
+            <input type="text" placeholder = "Type password" name ="password"/>
+            <br><br>
+            <button>Update</button>
+        </form>
+        <br><br>
+        <h2>DatabaseUpdateTest(productTableOnly)</h2>
+        <form action="/api/updateProducts">
+            <input type="text" placeholder = "Type name" name ="name"/>
+            <input type="text" placeholder = "Type manufacture" name ="manufacture"/>
+            <input type="text" placeholder = "Type type" name ="type"/>
+            <input type="text" placeholder = "Type price" name ="price"/>
+            <input type="text" placeholder = "Type description" name ="description"/>
+            <input type="text" placeholder = "Type pictureURL" name ="pictureURL"/>
+            <br><br>
+            <button>Update</button>
+        </form>
+        <h2>DatabaseUpdateTest(cartTableOnly)</h2>
+        <form action="/api/updateCart">
+            <input type="text" placeholder = "Type product_id" name ="product_id"/>
+            <input type="text" placeholder = "Type quantity" name ="quantity"/>
+            <br><br>
+            <button>Update</button>
+        </form>
+        <br><br>
+        <h2>DatabaseUpdateTest(inventoryTableOnly)</h2>
+        <form action="/api/updateInventory">
+            <input type="text" placeholder = "Type product_id" name ="product_id"/>
+            <input type="text" placeholder = "Type quantity" name ="quantity"/>
+            <br><br>
+            <button>Update</button>
+        </form>
+        <br><br>
+    </main>
+<%- include ('partials/footer.ejs') %>

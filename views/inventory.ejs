@@ -1,0 +1,17 @@
+<%- include('partials/header.ejs') %>
+
+   <a href="/"> Back to Search </a>
+    
+   <h1>Table Results</h1>
+   <h2>I'm in Inventory</h2>
+    
+   <% 
+       //displaying five keywords per line
+      rows.forEach(function(row, i){ %>
+       
+        <%= row["id"] %>  <%= row["product_id"] %> <%= row["quantity"]%><br>
+    
+    <% });%>
+
+
+<%- include('partials/footer.ejs') %>
