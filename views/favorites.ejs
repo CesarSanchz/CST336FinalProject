@@ -1,15 +1,15 @@
 <%- include('partials/header.ejs') %>
 
-   <a href="/"> Back to Search </a>
+
     
    <h1>Table Results</h1>
-   <h2>I'm in cart</h2>
-    
+   <h2>I'm in favorites</h2>
+   
    <% 
        //displaying five keywords per line
       rows.forEach(function(row, i){ %>
        
-        <%= row["id"] %>  <%= row["product_id"] %> <%= row["quantity"]%><br>
+        <%= row["id"] %>  <%= row["product_id"] %><br>
     
     <% });%>
 

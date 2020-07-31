@@ -1,17 +1,29 @@
 <%- include('partials/header.ejs') %>
 
-   <a href="/"> Back to Search </a>
     
    <h1>Table Results</h1>
    <h2>I'm in products</h2>
-    
-   <% 
-       //displaying five keywords per line
-      rows.forEach(function(row, i){ %>
+    <table>
+        <tr>
+            <th>Make</th>
+            <th>Model</th>
+            <th>Manufacturer</th>
+            <th>Type</th>
+            <th>Price</th>
+            <th>Picture</th>
+        </tr>
+        <tr>
+   <%rows.forEach(function(row){ %>
        
-        <%= row["id"] %>  <%= row["name"] %> <%= row["manufacture"]%> <%= row["type"] %> <%= row["price"] %> <%= row["pictureURL"] %><br>
-    
+        <td><%= row["make"] %></td>
+        <td><%= row["model"] %></td>
+        <td><%= row["manufacturer"]%></td>
+        <td> <%= row["type"] %></td>
+        <td> <%= row["price"] %></td>
+        <td> <img src =<%= row["pictureURL"]%> alt= <%= row["model"] %> width="200" height="200"></td>
+    </tr>
     <% });%>
-
+    
+</table>
 
 <%- include('partials/footer.ejs') %>
