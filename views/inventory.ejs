@@ -3,14 +3,19 @@
     
    <h1>Table Results</h1>
    <h2>I'm in Inventory</h2>
-    
-   <% 
-       //displaying five keywords per line
-      rows.forEach(function(row, i){ %>
+    <table>
+        <tr>
+            <th>Make</th>
+            <th>Quantity</th>
+        </tr>
+        <tr>
+   <%rows.forEach(function(row, i){ %>
        
-        <%= row["id"] %>  <%= row["product_id"] %> <%= row["quantity"]%><br>
+        <td><%= row["make"] %></td>
+        <td><%= row["quantity"]%></td>
     
+    </tr>
     <% });%>
-
+    </table>
 
 <%- include('partials/footer.ejs') %>

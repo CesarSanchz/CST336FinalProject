@@ -1,13 +1,107 @@
-<%- include ('partials/header.ejs') %>
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>Final Project Test</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="js/functions.js"></script>
+</head>
 <body>
     <main>
-                <form action="/logout">
+        <h1>Admin Panel</h1>
+        
+        <h2 Using STYLE="text-transform:capitalize" >Welcome Admin  !</h2>
+        
+        <form action="/logout">
             <button>
                 Logout
             </button>
         </form>
-        <h1>DatabaseTest(AdminPage)</h1>
         
+        <br><br>
+        
+        <button id ="showAdmins">Admin Information</button>
+        <div id="admins" style="display: none">
+            <h2>Admins</h2>
+            <table>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Hashed Password</th>
+                    <th>Remove</th>
+                </tr>
+                <tr>
+                    <%rows2.forEach(function(row, i){ %>
+                    <td><%= row["id"] %></td>
+                    <td><%= row["username"] %></td>
+                    <td><%= row["password"]%></td>
+                <script>console.log(<%= row["id"]%>)</script>
+                    <td><button class = "removeAdmin" value = <%= row["id"] %>>Remove</button></td>
+                </tr>
+                    <% });%>
+            </table>
+        </div>
+        
+        <br><br>
+        <button id ="showFavorites">Favorites Information</button>
+        <div id="favorites" style="display: none">
+             <h2>Favorites</h2>
+            <table>
+                <tr>
+                    <th>Product Name</th>
+                </tr>
+                <tr>
+                    <%rows3.forEach(function(row, i){ %>
+                    <td><%= row["make"] %></td>
+                </tr>
+                    <% });%>
+            </table>
+        </div>
+    
+        <br><br>
+        <button id="showInventory">Inventory Information</button>
+        <div id="inventory"  style="display: none">
+             <h2>Inventory</h2>
+            <table>
+                <tr>
+                    <th>Make</th>
+                    <th>Quantity</th>
+                    </tr>
+                <tr>
+                    <%rows4.forEach(function(row, i){ %>
+                    <td><%= row["make"] %></td>
+                    <td><%= row["quantity"]%></td>
+                </tr>
+                <% });%>
+            </table>
+        </div>
+
+        <br><br>
+        <button id="showProducts">Products Information</button>
+        <br><br>
+        <div id="products" style="display: none">
+             <h2>Products</h2>
+            <table>
+                <tr>
+                    <th>Make</th>
+                    <th>Model</th>
+                    <th>Manufacturer</th>
+                    <th>Type</th>
+                    <th>Price</th>
+                    <th>Picture</th>
+                </tr>
+                <tr>
+                <%rows.forEach(function(row){ %>
+                    <td><%= row["make"] %></td>
+                    <td><%= row["model"] %></td>
+                    <td><%= row["manufacturer"]%></td>
+                    <td> <%= row["type"] %></td>
+                    <td> <%= row["price"] %></td>
+                    <td> <img src =<%= row["pictureURL"]%> alt= <%= row["model"] %> width="200" height="200"></td>
+                </tr>
+                <% });%>
+            </table>
+        </div>
+        <br><br>
         <h2>DatabaseUpdateTest(adminTableOnly)</h2>
         <form action="/api/updateAdmins">
             <input type="text" placeholder = "Type Username" name ="username"/>
