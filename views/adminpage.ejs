@@ -9,7 +9,7 @@
     <main>
         <h1>Admin Panel</h1>
         
-        <h2 Using STYLE="text-transform:capitalize" >Welcome Admin  !</h2>
+        <h2 Using STYLE="text-transform:capitalize" >Welcome Admin  <%=username %>!</h2>
         
         <form action="/logout">
             <button>
@@ -47,11 +47,15 @@
              <h2>Favorites</h2>
             <table>
                 <tr>
+                    <th>ID</th>
                     <th>Product Name</th>
+                    <th>Remove</th>
                 </tr>
                 <tr>
                     <%rows3.forEach(function(row, i){ %>
+                    <td><%= row["id"] %></td>
                     <td><%= row["make"] %></td>
+                    <td><button class = "removeFavorite" value = <%= row["id"] %>>Remove</button></td>
                 </tr>
                     <% });%>
             </table>
@@ -63,11 +67,13 @@
              <h2>Inventory</h2>
             <table>
                 <tr>
+                    <th>ID</th>
                     <th>Make</th>
                     <th>Quantity</th>
                     </tr>
                 <tr>
                     <%rows4.forEach(function(row, i){ %>
+                    <td><%= row["id"] %></td>
                     <td><%= row["make"] %></td>
                     <td><%= row["quantity"]%></td>
                 </tr>
@@ -82,21 +88,26 @@
              <h2>Products</h2>
             <table>
                 <tr>
+                    <th>ID</th>
                     <th>Make</th>
                     <th>Model</th>
                     <th>Manufacturer</th>
                     <th>Type</th>
                     <th>Price</th>
                     <th>Picture</th>
+                    <th>Remove</th>
                 </tr>
                 <tr>
                 <%rows.forEach(function(row){ %>
+                    <td><%= row["id"]%></td>
                     <td><%= row["make"] %></td>
                     <td><%= row["model"] %></td>
                     <td><%= row["manufacturer"]%></td>
                     <td> <%= row["type"] %></td>
                     <td> <%= row["price"] %></td>
                     <td> <img src =<%= row["pictureURL"]%> alt= <%= row["model"] %> width="200" height="200"></td>
+                    <td><button class = "removeProduct" value = <%= row["id"] %>>Remove</button></td>
+                    
                 </tr>
                 <% });%>
             </table>

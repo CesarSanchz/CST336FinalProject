@@ -5,6 +5,7 @@ const request = require("request");
 const session = require('express-session')
 const pool = require("./dbPool.js");
 const bcrypt = require('bcrypt');
+var loggedUser= "";
 
 
 //Express use and set declarations
@@ -48,27 +49,16 @@ app.post("/login", async function(req,res){
     }
     
     let passwordMatch = await checkPassword(password, hashedPwd);
-    //console.log("passwordMatch: " + passwordMatch);
+    console.log("passwordMatch: " + passwordMatch);
 
     if (passwordMatch){
         req.session.authenticated = true;
+        loggedUser = username
        res.redirect("/adminpage")
     } else {
         res.render("login", {"loginError":true});
     }
 })
-
-app.get("/api/removeAdmin", function(req, res) {
-    let sql = "DELETE FROM admin WHERE id = ?";
-    let sqlParam = [req.query.value];
-    pool.query(sql, sqlParam, function (err, rows, fields) {
-        if (err) throw err;
-        console.log(rows);
-
-        res.redirect("/adminpage");
-     });
-})
-
 
 //Admin Logout route
 app.get("/logout", function(req, res){
@@ -79,11 +69,11 @@ app.get("/logout", function(req, res){
 //Admin page route
 app.get("/adminpage", isAuthenticated, function(req,res){
     
-    let username = [req.query.username];
+    let username = loggedUser;
     let sql = "SELECT * FROM product";
     let sql2 = "SELECT * FROM admin";
-    let sql3 = "SELECT product.make FROM favorites JOIN product WHERE product.id = favorites.product_id";
-    let sql4 = "SELECT product.make, Inventory.quantity FROM Inventory JOIN product WHERE product.id = Inventory.product_id";
+    let sql3 = "SELECT product.id, product.make FROM favorites JOIN product WHERE product.id = favorites.product_id";
+    let sql4 = "SELECT product.id, product.make, Inventory.quantity FROM Inventory JOIN product WHERE product.id = Inventory.product_id";
     pool.query(sql, function (err, rows) {
         //console.log(rows);
         pool.query(sql2, function (err, rows2) {
@@ -92,7 +82,6 @@ app.get("/adminpage", isAuthenticated, function(req,res){
                 pool.query(sql4, function(err, rows4) {
                 if (err) throw err;
                 //console.log(rows3);
-
                 res.render("adminpage" , {"rows":rows,"rows2":rows2, "rows3":rows3,"rows4":rows4,"username": username});
                 });
             });
@@ -100,7 +89,32 @@ app.get("/adminpage", isAuthenticated, function(req,res){
     });
 })
 
+app.get("/api/removeAdmin", function(req, res) {
+    let sql = "DELETE FROM admin WHERE id = ?";
+    let sqlParam = [req.query.value];
+    pool.query(sql, sqlParam, function (err, rows, fields) {
+        if (err) throw err;
+        console.log(rows);
+     });
+})
 
+app.get("/api/removeFavorite", function(req, res) {
+    let sql = "DELETE FROM favorites WHERE product_id = ?";
+    let sqlParam = [req.query.value];
+    pool.query(sql, sqlParam, function (err, rows, fields) {
+        if (err) throw err;
+        console.log(rows);
+     });
+})
+
+app.get("/api/removeProduct", function(req, res) {
+    let sql = "DELETE FROM product WHERE id = ?";
+    let sqlParam = [req.query.value];
+    pool.query(sql, sqlParam, function (err, rows, fields) {
+        if (err) throw err;
+        console.log(rows);
+     });
+})
 
 //THESE GETS WERE USED TO DISPLAY ALL DATABASE INFO TODO -> REMOVE
 /**
@@ -200,7 +214,7 @@ app.get("/api/updateInventory", function(req, res){
      return new Promise( function(resolve, reject){
        
          bcrypt.compare(password, hashedValue, function(err,res){
-             //console.log("Result: "+ res);
+             console.log("Result: "+ res);
              resolve(res);
          });
      });
