@@ -19,6 +19,14 @@
         
         <br><br>
         
+        <form action="/addAdmin"><button>Add a new Admin</button></form>
+        
+        <br><br>
+        
+         <form action="/addProduct"><button>Add a new Product</button></form>
+        
+        <br><br>
+        
         <button id ="showAdmins">Admin Information</button>
         <div id="admins" style="display: none">
             <h2>Admins</h2>
@@ -26,21 +34,22 @@
                 <tr>
                     <th>ID</th>
                     <th>Username</th>
-                    <th>Hashed Password</th>
                     <th>Remove</th>
+                    
                 </tr>
                 <tr>
                     <%rows2.forEach(function(row, i){ %>
                     <td><%= row["id"] %></td>
                     <td><%= row["username"] %></td>
-                    <td><%= row["password"]%></td>
-                <script>console.log(<%= row["id"]%>)</script>
                     <td><button class = "removeAdmin" value = <%= row["id"] %>>Remove</button></td>
+                    
                 </tr>
                     <% });%>
             </table>
         </div>
         
+        <br><br>
+       
         <br><br>
         <button id ="showFavorites">Favorites Information</button>
         <div id="favorites" style="display: none">
@@ -96,6 +105,7 @@
                     <th>Price</th>
                     <th>Picture</th>
                     <th>Remove</th>
+                    <th>Update</th>
                 </tr>
                 <tr>
                 <%rows.forEach(function(row){ %>
@@ -107,39 +117,25 @@
                     <td> <%= row["price"] %></td>
                     <td> <img src =<%= row["pictureURL"]%> alt= <%= row["model"] %> width="200" height="200"></td>
                     <td><button class = "removeProduct" value = <%= row["id"] %>>Remove</button></td>
-                    
+                    <td><button class = "changeProduct" value = <%= row["id"] %>>Update</button></td>
                 </tr>
                 <% });%>
             </table>
         </div>
-        <br><br>
-        <h2>DatabaseUpdateTest(adminTableOnly)</h2>
-        <form action="/api/updateAdmins">
-            <input type="text" placeholder = "Type Username" name ="username"/>
-            <input type="text" placeholder = "Type password" name ="password"/>
-            <br><br>
-            <button>Update</button>
-        </form>
-        <br><br>
-        <h2>DatabaseUpdateTest(productTableOnly)</h2>
+        <div id="updateProductFrom" style="display: none">
+            
         <form action="/api/updateProducts">
-            <input type="text" placeholder = "Type make" name ="make"/>
-            <input type="text" placeholder = "Type model" name ="model"/>
-            <input type="text" placeholder = "Type manufacture" name ="manufacture"/>
-            <input type="text" placeholder = "Type type" name ="type"/>
-            <input type="text" placeholder = "Type price" name ="price"/>
-            <input type="text" placeholder = "Type description" name ="description"/>
-            <input type="text" placeholder = "Type pictureURL" name ="pictureURL"/>
+            <input id = "make" type="text" placeholder = "Type make" name ="make" required/>
+            <input id = "model" type="text" placeholder = "Type model" name ="model" required/>
+            <input id = "manufacturer" type="text" placeholder = "Type manufacturer" name ="manufacturer" required/>
+            <input id = "type" type ="text" placeholder = "Type type" name ="type" required/>
+            <input id = "price" type="text" placeholder = "Type price" name ="price" required/>
+            <input id = "description" type="text" placeholder = "Type description" name ="description" required/>
+            <input id ="pictureURL"type="text" placeholder = "Type pictureURL" name ="pictureURL" required/>
             <br><br>
             <button>Update</button>
         </form>
-        <h2>DatabaseUpdateTest(cartTableOnly)</h2>
-        <form action="/api/updateCart">
-            <input type="text" placeholder = "Type product_id" name ="product_id"/>
-            <input type="text" placeholder = "Type quantity" name ="quantity"/>
-            <br><br>
-            <button>Update</button>
-        </form>
+        </div>
         <br><br>
         <h2>DatabaseUpdateTest(inventoryTableOnly)</h2>
         <form action="/api/updateInventory">

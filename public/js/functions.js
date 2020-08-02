@@ -1,6 +1,9 @@
 /* global $ */
 $(document).ready(function(){
 
+let productToUpdate = "";
+
+
 $('#showProducts').on('click',function(){   
   var x = document.getElementById("products");
   if (x.style.display === "none") {
@@ -47,7 +50,38 @@ $('#showFavorites').on('click',function(){
        }
    });
        
-      
+    $('.changeProduct').on('click', function() {
+        productToUpdate= (this).value;
+        getProductInfo(productToUpdate);
+        var x = document.getElementById("updateProductFrom");
+       x.style.display = "block";
+        
+    })
+    
+    function getProductInfo(value){
+        $.ajax({
+            mehtod: "get",
+            url: "/api/getProductInfo",
+            data: {
+                "value":value
+            },
+            success: function(data, success){
+                console.log("succecc")
+                data.forEach(function(row){
+                    $("#make").val(row.make);
+                    $("#model").val(row.model);
+                    $("#manufacturer").val(row.manufacturer);
+                    $("#type").val(row.type);
+                    $("#price").val(row.price);
+                    $("#description").val(row.description);
+                    $("#pictureURL").val(row.pictureURL);
+                })
+               
+            }
+        })
+    }
+    
+    
     function removeAdmin(value){
         $.ajax({
             method: "get",
@@ -56,6 +90,7 @@ $('#showFavorites').on('click',function(){
                 "value":value
             },
             success: function(data, satus){
+
             }
         });//ajax
        }
@@ -83,7 +118,7 @@ $('#showFavorites').on('click',function(){
         });//ajax
        }
        
-           $('.removeProduct').on('click',function(){
+    $('.removeProduct').on('click',function(){
        if(confirm("Are you sure you want to delete this record?")){
           alert("DatabaseUpdated");
           let productID =(this).value;

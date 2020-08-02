@@ -6,6 +6,9 @@ const session = require('express-session')
 const pool = require("./dbPool.js");
 const bcrypt = require('bcrypt');
 var loggedUser= "";
+const saltRounds = 10;
+
+
 
 
 //Express use and set declarations
@@ -75,10 +78,13 @@ app.get("/adminpage", isAuthenticated, function(req,res){
     let sql3 = "SELECT product.id, product.make FROM favorites JOIN product WHERE product.id = favorites.product_id";
     let sql4 = "SELECT product.id, product.make, Inventory.quantity FROM Inventory JOIN product WHERE product.id = Inventory.product_id";
     pool.query(sql, function (err, rows) {
+        if (err) throw err;
         //console.log(rows);
         pool.query(sql2, function (err, rows2) {
+            if (err) throw err;
             //console.log(rows2);
             pool.query(sql3, function (err, rows3){
+                if (err) throw err;
                 pool.query(sql4, function(err, rows4) {
                 if (err) throw err;
                 //console.log(rows3);
@@ -87,6 +93,36 @@ app.get("/adminpage", isAuthenticated, function(req,res){
             });
         });
     });
+})
+
+app.get("/api/getProductInfo" , isAuthenticated,function(req, res) {
+    let username = loggedUser;
+    let productID = [req.query.value]
+    let sql ="SELECT * from product WHERE id = ?"
+    pool.query(sql, productID, function(err, rows, fields) {
+        if(err) throw err;
+        console.log(rows);
+         res.send(rows);
+    })
+})
+
+
+app.get("/addAdmin", isAuthenticated, function(req, res) {
+  res.render("addAdmin");
+})
+app.get("/api/updateProducts", isAuthenticated, function(req, res) {
+    let sql = "UPDATE product SET make = ?, model = ?, manufacturer = ?, type = ?, price = ?, description = ?, pictureURL = ? WHERE make = ?"
+    let sqlParam = [req.query.make, req.query.model, req.query.manufacturer, req.query.type, req.query.price, req.query.description, req.query.pictureURL, req.query.make];
+    console.log(sqlParam)
+    pool.query(sql, sqlParam, function (err, rows, fields) {
+        if (err) throw err;
+        console.log(rows);
+        res.render("tableUpdated");
+     });
+});
+
+app.get("/addProduct", isAuthenticated, function(req, res) {
+  res.render("addProduct");
 })
 
 app.get("/api/removeAdmin", function(req, res) {
@@ -115,6 +151,106 @@ app.get("/api/removeProduct", function(req, res) {
         console.log(rows);
      });
 })
+
+//DATABASE UPDATE ROUTES
+
+//updated admins table
+app.get("/api/updateAdmins", async function(req, res){
+    let plainPw = req.query.password;
+    let hashedPwd = await hashPwd(plainPw);
+    console.log(hashedPwd);
+    let sql = "INSERT INTO admin (username, password) VALUES (?,?)";
+    let sqlParams = [req.query.username, hashedPwd];
+    pool.query(sql, sqlParams, function (err, rows, fields) {
+      if(err){  //we make sure theres an error (error obj)
+        if(err.errno==1062){   
+            return res.render('addAdmin',{"loginError":true});
+            }
+        else{
+            throw err;
+            }
+      }
+      console.log(rows);
+      res.render("tableUpdated");
+    });
+});//api/updateAdmins
+
+//updated admins table
+app.get("/api/updateProducts", function(req, res){
+  let sql;
+  let sqlParams;
+  sql = "INSERT INTO product (make, model, manufacturer, type, price, description, pictureURL) VALUES (?,?,?,?,?,?,?)";
+  sqlParams = [req.query.make, req.query.model, req.query.manufacture, req.query.type, req.query.price, req.query.description, req.query.pictureURL];
+
+  pool.query(sql, sqlParams, function (err, rows, fields) {
+    if(err){  //we make sure theres an error (error obj)
+        if(err.errno==1062){   
+            return res.render('addProduct',{"loginError":true});
+            }
+        else{
+            throw err;
+            }
+      }
+    console.log(rows);
+    res.render("tableUpdated");
+  });
+});//api/updateProducts
+
+app.get("/api/updateInventory", function(req, res){
+  let sql;
+  let sqlParams;
+  sql = "INSERT INTO Inventory (product_id, quantity) VALUES (?,?)";
+  sqlParams = [req.query.product_id, req.query.quantity];
+
+  pool.query(sql, sqlParams, function (err, rows, fields) {
+    if (err) throw err;
+    console.log(rows);
+    res.render("tableUpdated");
+  });
+});//api/updateInventory
+
+
+ function checkPassword(password, hashedValue){
+     return new Promise( function(resolve, reject){
+       
+         bcrypt.compare(password, hashedValue, function(err,res){
+             console.log("Result: "+ res);
+             resolve(res);
+         });
+     });
+ }
+function hashPwd(plainPw){
+    
+    return new Promise(function(resolve,reject){
+        const salt = bcrypt.genSaltSync(saltRounds);
+        const hash = bcrypt.hashSync(plainPw, salt);
+        console.log(hash)
+        resolve(hash);
+    })
+}
+function isAuthenticated(req,res,next){
+    if(!req.session.authenticated){
+        res.redirect('login');
+    } else {
+        next();
+    }
+}
+
+ function checkUsername(username){
+     let sql = "SELECT * FROM admin WHERE username = ?"
+     return new Promise(function(resolve, reject){
+             pool.query(sql,[username], function(err, rows,fields){
+                 if(err) throw err;
+                 //console.log("Rows found: " + rows.length);
+                 resolve(rows);
+             });//query
+     })//promise
+ }
+//start server
+app.listen(process.env.PORT, process.env.IP, function(){
+    console.log("Express server is running...");
+});
+
 
 //THESE GETS WERE USED TO DISPLAY ALL DATABASE INFO TODO -> REMOVE
 /**
@@ -152,93 +288,3 @@ app.get("/inventory",  function(req, res) {
   });  
 });//search
 **/
-
-//DATABASE UPDATE ROUTES
-
-//updated admins table
-app.get("/api/updateAdmins", function(req, res){
-  let sql;
-  let sqlParams;
-  sql = "INSERT INTO admin (username, password) VALUES (?,?)";
-  sqlParams = [req.query.username, req.query.password];
-
-  pool.query(sql, sqlParams, function (err, rows, fields) {
-    if (err) throw err;
-    console.log(rows);
-    res.render("tableUpdated");
-  });
-});//api/updateAdmins
-
-//updated admins table
-app.get("/api/updateProducts", function(req, res){
-  let sql;
-  let sqlParams;
-  sql = "INSERT INTO product (make, model, manufacturer, type, price, description, pictureURL) VALUES (?,?,?,?,?,?,?)";
-  sqlParams = [req.query.make, req.query.model, req.query.manufacture, req.query.type, req.query.price, req.query.description, req.query.pictureURL];
-
-  pool.query(sql, sqlParams, function (err, rows, fields) {
-    if (err) throw err;
-    console.log(rows);
-    res.render("tableUpdated");
-  });
-});//api/updateProducts
-
-app.get("/api/updateCart", function(req, res){
-  let sql;
-  let sqlParams;
-  sql = "INSERT INTO cart (product_id, quantity) VALUES (?,?)";
-  sqlParams = [req.query.product_id, req.query.quantity];
-
-  pool.query(sql, sqlParams, function (err, rows, fields) {
-    if (err) throw err;
-    console.log(rows);
-    res.render("tableUpdated");
-  });
-});//api/updateCart
-
-app.get("/api/updateInventory", function(req, res){
-  let sql;
-  let sqlParams;
-  sql = "INSERT INTO Inventory (product_id, quantity) VALUES (?,?)";
-  sqlParams = [req.query.product_id, req.query.quantity];
-
-  pool.query(sql, sqlParams, function (err, rows, fields) {
-    if (err) throw err;
-    console.log(rows);
-    res.render("tableUpdated");
-  });
-});//api/updateInventory
-
-
- function checkPassword(password, hashedValue){
-     return new Promise( function(resolve, reject){
-       
-         bcrypt.compare(password, hashedValue, function(err,res){
-             console.log("Result: "+ res);
-             resolve(res);
-         });
-     });
- }
-
-function isAuthenticated(req,res,next){
-    if(!req.session.authenticated){
-        res.redirect('login');
-    } else {
-        next();
-    }
-}
-
- function checkUsername(username){
-     let sql = "SELECT * FROM admin WHERE username = ?"
-     return new Promise(function(resolve, reject){
-             pool.query(sql,[username], function(err, rows,fields){
-                 if(err) throw err;
-                 //console.log("Rows found: " + rows.length);
-                 resolve(rows);
-             });//query
-     })//promise
- }
-//start server
-app.listen(process.env.PORT, process.env.IP, function(){
-    console.log("Express server is running...");
-});
