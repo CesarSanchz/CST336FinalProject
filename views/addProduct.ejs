@@ -2,14 +2,15 @@
     <body>
         <h1 class = "title">Add Admin</h1>
         <main>
-        <form action="/api/updateProducts">
+        <form action="/api/addProducts">
             <input type="text" placeholder = "Type make" name ="make" required/>
             <input type="text" placeholder = "Type model" name ="model" required/>
             <input type="text" placeholder = "Type manufacture" name ="manufacture" required/>
             <input type="text" placeholder = "Type type" name ="type" required/>
-            <input type="text" placeholder = "Type price" name ="price" required/>
+            $<input type="number" placeholder = "Type price" name ="price" min="0.01" step="0.01" max ="2500.00"  required/>
             <input type="text" placeholder = "Type description" name ="description" required/>
             <input type="text" placeholder = "Type pictureURL" name ="pictureURL" required/>
+            <input type="number" placeholder ="Amount In Stock" name="quantity" min = "0" max = "100" required />
             <br><br>
             <button>Update</button>
         </form>

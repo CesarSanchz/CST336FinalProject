@@ -21,7 +21,7 @@
         
         <form action="/addAdmin"><button>Add a new Admin</button></form>
         
-        <br><br>
+        <br>
         
          <form action="/addProduct"><button>Add a new Product</button></form>
         
@@ -49,8 +49,7 @@
         </div>
         
         <br><br>
-       
-        <br><br>
+        
         <button id ="showFavorites">Favorites Information</button>
         <div id="favorites" style="display: none">
              <h2>Favorites</h2>
@@ -121,6 +120,14 @@
                 </tr>
                 <% });%>
             </table>
+                            <h2>Update Inventory</h2>
+        <form action="/api/updateInventory">
+            <input type="number" placeholder = "Product Number" name ="product_id" min="1" max="100" required/>
+            <input type="number" placeholder = "Quantity" name ="quantity" min="0" max="100" required/>
+            <br><br>
+            <button>Update</button>
+        </form>
+        </div>
         </div>
         <div id="updateProductFrom" style="display: none">
             
@@ -135,15 +142,9 @@
             <br><br>
             <button>Update</button>
         </form>
-        </div>
+
         <br><br>
-        <h2>DatabaseUpdateTest(inventoryTableOnly)</h2>
-        <form action="/api/updateInventory">
-            <input type="text" placeholder = "Type product_id" name ="product_id"/>
-            <input type="text" placeholder = "Type quantity" name ="quantity"/>
-            <br><br>
-            <button>Update</button>
-        </form>
+
         <br><br>
     </main>
 <%- include ('partials/footer.ejs') %>

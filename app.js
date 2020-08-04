@@ -9,8 +9,6 @@ var loggedUser= "";
 const saltRounds = 10;
 
 
-
-
 //Express use and set declarations
 app.set("view engine" , "ejs")
 
@@ -76,7 +74,7 @@ app.get("/adminpage", isAuthenticated, function(req,res){
     let sql = "SELECT * FROM product";
     let sql2 = "SELECT * FROM admin";
     let sql3 = "SELECT product.id, product.make FROM favorites JOIN product WHERE product.id = favorites.product_id";
-    let sql4 = "SELECT product.id, product.make, Inventory.quantity FROM Inventory JOIN product WHERE product.id = Inventory.product_id";
+    let sql4 = "SELECT product.id, product.make, Inventory.quantity FROM Inventory JOIN product WHERE product.id = Inventory.product_id ORDER BY product.id";
     pool.query(sql, function (err, rows) {
         if (err) throw err;
         //console.log(rows);
@@ -95,6 +93,18 @@ app.get("/adminpage", isAuthenticated, function(req,res){
     });
 })
 
+
+//route to page to add admin
+app.get("/addAdmin", isAuthenticated, function(req, res) {
+  res.render("addAdmin");
+})
+
+//route to page to add product
+app.get("/addProduct", isAuthenticated, function(req, res) {
+  res.render("addProduct");
+})
+
+//API to extract product information from database
 app.get("/api/getProductInfo" , isAuthenticated,function(req, res) {
     let username = loggedUser;
     let productID = [req.query.value]
@@ -107,9 +117,46 @@ app.get("/api/getProductInfo" , isAuthenticated,function(req, res) {
 })
 
 
-app.get("/addAdmin", isAuthenticated, function(req, res) {
-  res.render("addAdmin");
+/////DATABASE UPDATE ROUTES/////
+
+//API to remove admin data from database
+app.get("/api/removeAdmin", function(req, res) {
+    let sql = "DELETE FROM admin WHERE id = ?";
+    let sqlParam = [req.query.value];
+    pool.query(sql, sqlParam, function (err, rows, fields) {
+        if (err) throw err;
+        console.log(rows);
+     });
 })
+
+
+//API to remove favorites data from database
+app.get("/api/removeFavorite", function(req, res) {
+    let sql = "DELETE FROM favorites WHERE product_id = ?";
+    let sqlParam = [req.query.value];
+    pool.query(sql, sqlParam, function (err, rows, fields) {
+        if (err) throw err;
+        console.log(rows);
+     });
+})
+
+
+//API to remove product from database
+app.get("/api/removeProduct", function(req, res) {
+    let sql2 = "DELETE FROM product WHERE id = ?";
+    let sqlParam = [req.query.value];
+    let sql = "DELETE FROM Inventory WHERE product_id = ?"
+    pool.query(sql, sqlParam, function (err, rows, fields) {
+        if (err) throw err;
+        pool.query(sql2, sqlParam, function(err, rows, fields) {
+            if(err) throw err
+            console.log(rows);
+        })
+        
+     });
+})
+
+//API to update selected product
 app.get("/api/updateProducts", isAuthenticated, function(req, res) {
     let sql = "UPDATE product SET make = ?, model = ?, manufacturer = ?, type = ?, price = ?, description = ?, pictureURL = ? WHERE make = ?"
     let sqlParam = [req.query.make, req.query.model, req.query.manufacturer, req.query.type, req.query.price, req.query.description, req.query.pictureURL, req.query.make];
@@ -121,40 +168,7 @@ app.get("/api/updateProducts", isAuthenticated, function(req, res) {
      });
 });
 
-app.get("/addProduct", isAuthenticated, function(req, res) {
-  res.render("addProduct");
-})
-
-app.get("/api/removeAdmin", function(req, res) {
-    let sql = "DELETE FROM admin WHERE id = ?";
-    let sqlParam = [req.query.value];
-    pool.query(sql, sqlParam, function (err, rows, fields) {
-        if (err) throw err;
-        console.log(rows);
-     });
-})
-
-app.get("/api/removeFavorite", function(req, res) {
-    let sql = "DELETE FROM favorites WHERE product_id = ?";
-    let sqlParam = [req.query.value];
-    pool.query(sql, sqlParam, function (err, rows, fields) {
-        if (err) throw err;
-        console.log(rows);
-     });
-})
-
-app.get("/api/removeProduct", function(req, res) {
-    let sql = "DELETE FROM product WHERE id = ?";
-    let sqlParam = [req.query.value];
-    pool.query(sql, sqlParam, function (err, rows, fields) {
-        if (err) throw err;
-        console.log(rows);
-     });
-})
-
-//DATABASE UPDATE ROUTES
-
-//updated admins table
+//API to INSERT admins table
 app.get("/api/updateAdmins", async function(req, res){
     let plainPw = req.query.password;
     let hashedPwd = await hashPwd(plainPw);
@@ -175,32 +189,42 @@ app.get("/api/updateAdmins", async function(req, res){
     });
 });//api/updateAdmins
 
-//updated admins table
-app.get("/api/updateProducts", function(req, res){
-  let sql;
-  let sqlParams;
-  sql = "INSERT INTO product (make, model, manufacturer, type, price, description, pictureURL) VALUES (?,?,?,?,?,?,?)";
-  sqlParams = [req.query.make, req.query.model, req.query.manufacture, req.query.type, req.query.price, req.query.description, req.query.pictureURL];
 
-  pool.query(sql, sqlParams, function (err, rows, fields) {
-    if(err){  //we make sure theres an error (error obj)
-        if(err.errno==1062){   
-            return res.render('addProduct',{"loginError":true});
-            }
-        else{
-            throw err;
-            }
-      }
-    console.log(rows);
-    res.render("tableUpdated");
-  });
+//API to INSERT product table
+app.get("/api/addProducts", function(req, res){
+    let sql = "INSERT INTO product (make, model, manufacturer, type, price, description, pictureURL) VALUES (?,?,?,?,?,?,?)";
+    let sqlParams = [req.query.make, req.query.model, req.query.manufacture, req.query.type, req.query.price, req.query.description, req.query.pictureURL];
+    let getID = "SELECT id from product ORDER BY id DESC LIMIT 1;"
+    let quantity = req.query.quantity;
+    let sql2 = "INSERT INTO Inventory(product_id, quantity) VALUES (?,?)"
+    pool.query(sql, sqlParams, function (err, rows, fields) {
+        if(err){ 
+            if(err.errno==1062){   
+                return res.render('addProduct',{"loginError":true});
+                }
+            else{
+                throw err;
+                }
+          }
+            console.log(rows);
+            pool.query(getID, function(err, rows, fields){
+                if (err) throw err;
+                let sqlParams2 =[rows[0].id,quantity]
+                pool.query(sql2, sqlParams2, function(err, rows, fields) {
+                    if (err) throw err;
+                     res.render("tableUpdated");
+                })
+               
+          })
+      });
 });//api/updateProducts
 
+//API to UPDATE data to Inventory table
 app.get("/api/updateInventory", function(req, res){
   let sql;
   let sqlParams;
-  sql = "INSERT INTO Inventory (product_id, quantity) VALUES (?,?)";
-  sqlParams = [req.query.product_id, req.query.quantity];
+  sql = "UPDATE Inventory SET quantity = ? WHERE product_id = ?";
+  sqlParams = [ req.query.quantity,req.query.product_id];
 
   pool.query(sql, sqlParams, function (err, rows, fields) {
     if (err) throw err;
@@ -210,6 +234,15 @@ app.get("/api/updateInventory", function(req, res){
 });//api/updateInventory
 
 
+//start server
+app.listen(process.env.PORT, process.env.IP, function(){
+    console.log("Express server is running...");
+});
+
+
+/////SERVER SIDE FUNCTIONS//////
+
+//compares password entered to given hashed value
  function checkPassword(password, hashedValue){
      return new Promise( function(resolve, reject){
        
@@ -219,6 +252,9 @@ app.get("/api/updateInventory", function(req, res){
          });
      });
  }
+ 
+
+//hashes given password
 function hashPwd(plainPw){
     
     return new Promise(function(resolve,reject){
@@ -228,6 +264,8 @@ function hashPwd(plainPw){
         resolve(hash);
     })
 }
+
+//Checks if admin is logged in if not loads login page
 function isAuthenticated(req,res,next){
     if(!req.session.authenticated){
         res.redirect('login');
@@ -236,6 +274,8 @@ function isAuthenticated(req,res,next){
     }
 }
 
+
+//Checks if given variable exissts in database
  function checkUsername(username){
      let sql = "SELECT * FROM admin WHERE username = ?"
      return new Promise(function(resolve, reject){
@@ -246,10 +286,7 @@ function isAuthenticated(req,res,next){
              });//query
      })//promise
  }
-//start server
-app.listen(process.env.PORT, process.env.IP, function(){
-    console.log("Express server is running...");
-});
+
 
 
 //THESE GETS WERE USED TO DISPLAY ALL DATABASE INFO TODO -> REMOVE
