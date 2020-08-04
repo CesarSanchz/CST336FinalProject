@@ -2,6 +2,7 @@
 $(document).ready(function(){
 
 let productToUpdate = "";
+let isloaded = false;
 
 
 $('#showProducts').on('click',function(){   
@@ -54,9 +55,94 @@ $('#showFavorites').on('click',function(){
         productToUpdate= (this).value;
         getProductInfo(productToUpdate);
         var x = document.getElementById("updateProductFrom");
-       x.style.display = "block";
+        x.style.display = "block";
+        document.getElementById('updateProductFrom').scrollIntoView({behavior: "smooth"});
         
     })
+    
+    
+    $('.removeFavorite').on('click',function(){
+       if(confirm("Are you sure you want to delete this record?")){
+          alert("DatabaseUpdated");
+          let favoriteID =(this).value;
+          //console.log(favoriteID);
+          removeFavorite(favoriteID);
+          window.location.href=window.location.href
+       }
+   });
+    
+    $('.removeProduct').on('click',function(){
+       if(confirm("Are you sure you want to delete this record?")){
+          alert("DatabaseUpdated");
+          let productID =(this).value;
+          //console.log(productID);
+          removeProduct(productID);
+          window.location.href=window.location.href
+       }
+   });
+    
+    
+    $("#statistics").on('click', function(){
+        var x = document.getElementById("staticsTables");
+            if (x.style.display === "none") {
+                x.style.display = "block";
+            } else {
+                x.style.display = "none";
+            }
+        if(!isloaded){
+            stockByMan();
+            priceByType();
+            productsInStockByType();
+        }
+    })//onClick
+    
+    function productsInStockByType(){
+        $.ajax({
+            mehtod: "get",
+            url: "/api/productsInStockByType",
+            data:{
+                
+            },
+            success: function(data, success){
+                isloaded = true
+                data.forEach(function(row){
+                    $("#productsInStockByType").append("<tr><td>"+ row.productType +"</td><td>"+ row.total+"</td></tr>")
+                })//forEach
+            }//success
+        })//ajax
+    }
+    
+    function stockByMan(){
+        $.ajax({
+            mehtod: "get",
+            url: "/api/stockByMan",
+            data:{
+                
+            },
+            success: function(data, success){
+                isloaded = true
+                data.forEach(function(row){
+                    $("#stockByMan").append("<tr><td>"+ row.manufacturer +"</td><td>"+ row.stock+"</td></tr>")
+                })//forEach
+            }//success
+        })//ajax
+    }
+    
+    function priceByType(){
+        $.ajax({
+            mehtod: "get",
+            url: "/api/priceByType",
+            data:{
+                
+            },
+            success: function(data, success){
+                isloaded = true
+                data.forEach(function(row){
+                    $("#priceByType").append("<tr><td>"+ row.productType +"</td><td>$"+ row.priceTotal+"</td></tr>")
+                })//forEach
+            }//success
+        })//ajax
+    }
     
     function getProductInfo(value){
         $.ajax({
@@ -66,7 +152,7 @@ $('#showFavorites').on('click',function(){
                 "value":value
             },
             success: function(data, success){
-                console.log("succecc")
+                //console.log("succecc")
                 data.forEach(function(row){
                     $("#make").val(row.make);
                     $("#model").val(row.model);
@@ -95,15 +181,7 @@ $('#showFavorites').on('click',function(){
         });//ajax
        }
        
-    $('.removeFavorite').on('click',function(){
-       if(confirm("Are you sure you want to delete this record?")){
-          alert("DatabaseUpdated");
-          let favoriteID =(this).value;
-          console.log(favoriteID);
-          removeFavorite(favoriteID);
-          window.location.href=window.location.href
-       }
-   });
+
        
       
     function removeFavorite(value){
@@ -118,15 +196,7 @@ $('#showFavorites').on('click',function(){
         });//ajax
        }
        
-    $('.removeProduct').on('click',function(){
-       if(confirm("Are you sure you want to delete this record?")){
-          alert("DatabaseUpdated");
-          let productID =(this).value;
-          console.log(productID);
-          removeProduct(productID);
-          window.location.href=window.location.href
-       }
-   });
+
        
       
     function removeProduct(value){

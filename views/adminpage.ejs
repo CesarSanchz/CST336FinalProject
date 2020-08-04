@@ -5,6 +5,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="js/functions.js"></script>
 </head>
+
 <body>
     <main>
         <h1>Admin Panel</h1>
@@ -23,11 +24,13 @@
         
         <br>
         
-         <form action="/addProduct"><button>Add a new Product</button></form>
+        <form action="/addProduct"><button>Add a new Product</button></form>
         
         <br><br>
         
         <button id ="showAdmins">Admin Information</button>
+        
+        <!--Admin table is hidden until button is clicked -->
         <div id="admins" style="display: none">
             <h2>Admins</h2>
             <table>
@@ -51,6 +54,8 @@
         <br><br>
         
         <button id ="showFavorites">Favorites Information</button>
+        
+         <!--Favorites table is hidden until button is clicked -->
         <div id="favorites" style="display: none">
              <h2>Favorites</h2>
             <table>
@@ -71,6 +76,8 @@
     
         <br><br>
         <button id="showInventory">Inventory Information</button>
+        
+        <!--Invenotry table is hidden until button is clicked -->
         <div id="inventory"  style="display: none">
              <h2>Inventory</h2>
             <table>
@@ -92,6 +99,8 @@
         <br><br>
         <button id="showProducts">Products Information</button>
         <br><br>
+        
+        <!--Product table is hidden until button is clicked -->
         <div id="products" style="display: none">
              <h2>Products</h2>
             <table>
@@ -120,31 +129,71 @@
                 </tr>
                 <% });%>
             </table>
-                            <h2>Update Inventory</h2>
-        <form action="/api/updateInventory">
-            <input type="number" placeholder = "Product Number" name ="product_id" min="1" max="100" required/>
-            <input type="number" placeholder = "Quantity" name ="quantity" min="0" max="100" required/>
-            <br><br>
-            <button>Update</button>
-        </form>
-        </div>
-        </div>
-        <div id="updateProductFrom" style="display: none">
+        
+
+              <!--Form is hidden until button is clicked -->
+            <div id="updateProductFrom" style="display: none">
+                
+                <h2>Update Product</h2>  
+                
+                <form action="/api/updateProducts">
+                    <input id = "make" type="text" placeholder = "Type make" name ="make" required/>
+                    <input id = "model" type="text" placeholder = "Type model" name ="model" required/>
+                    <input id = "manufacturer" type="text" placeholder = "Type manufacturer" name ="manufacturer" required/>
+                    <input id = "type" type ="text" placeholder = "Type type" name ="type" required/>
+                    <input id = "price" type="text" placeholder = "Type price" name ="price" required/>
+                    <input id = "description" type="text" placeholder = "Type description" name ="description" required/>
+                    <input id ="pictureURL"type="text" placeholder = "Type pictureURL" name ="pictureURL" required/>
+                    <br><br>
+                    <button>Update</button>
+                </form>
             
-        <form action="/api/updateProducts">
-            <input id = "make" type="text" placeholder = "Type make" name ="make" required/>
-            <input id = "model" type="text" placeholder = "Type model" name ="model" required/>
-            <input id = "manufacturer" type="text" placeholder = "Type manufacturer" name ="manufacturer" required/>
-            <input id = "type" type ="text" placeholder = "Type type" name ="type" required/>
-            <input id = "price" type="text" placeholder = "Type price" name ="price" required/>
-            <input id = "description" type="text" placeholder = "Type description" name ="description" required/>
-            <input id ="pictureURL"type="text" placeholder = "Type pictureURL" name ="pictureURL" required/>
-            <br><br>
-            <button>Update</button>
-        </form>
+            </div>
+            
+            <h2>Update Inventory</h2>
+            
+            <form action="/api/updateInventory">
+                <input type="number" placeholder = "Product Number" name ="product_id" min="1" max="100" required/>
+                <input type="number" placeholder = "Quantity" name ="quantity" min="0" max="100" required/>
+                <br><br>
+                <button>Update</button>
+            </form>
+            
+        </div>
+        <br>
+        
+        
+        <button id="statistics">The Tech Guys Store Statistics</button>
+        
+        
+         <!--All tables are hidden until button is clicked -->
+        <div id ="staticsTables" style="display: none">
+            <h3>Stock by Manufacturer</h3>
+            <table id = "stockByMan">
+                <tr>
+                    <th>Manufacturer</th>
+                    <th>Number of Makes in Stock</th>
+                </tr>
 
-        <br><br>
-
+            </table>
+            
+            <h3>Total Value of Products in Stock By Type</h3>
+            <table id = "priceByType">
+                <tr>
+                    <th>Product Type</th>
+                    <th>Value</th>
+                </tr>
+            </table>
+            
+            <h3>Total Number of Products in Stock By Type</h3>
+            
+            <table id = "productsInStockByType">
+                <tr>
+                    <th>Product Type</th>
+                    <th>Amount in Stock</th>
+                </tr>
+            </table>
+        </div>
         <br><br>
     </main>
 <%- include ('partials/footer.ejs') %>

@@ -22,9 +22,7 @@ app.use(session({
 
 app.use(express.urlencoded({extended: true}));
 
-
-
-//routes
+//ROUTES
 
 //TODO THIS ROUTE SHOULD BE THE LANDING PAGE ROUTE <- DANIEL
 app.get("/", function(req, res){
@@ -40,15 +38,15 @@ app.get("/login", function(req, res){
 app.post("/login", async function(req,res){
     let username = req.body.username;
     let password = req.body.password;
-    
+
     let result = await checkUsername(username);
     console.dir(result);
     let hashedPwd = "";
-    
+
     if(result.length > 0){
         hashedPwd=result[0].password;
     }
-    
+
     let passwordMatch = await checkPassword(password, hashedPwd);
     console.log("passwordMatch: " + passwordMatch);
 
@@ -69,7 +67,7 @@ app.get("/logout", function(req, res){
 
 //Admin page route
 app.get("/adminpage", isAuthenticated, function(req,res){
-    
+
     let username = loggedUser;
     let sql = "SELECT * FROM product";
     let sql2 = "SELECT * FROM admin";
@@ -111,8 +109,8 @@ app.get("/api/getProductInfo" , isAuthenticated,function(req, res) {
     let sql ="SELECT * from product WHERE id = ?"
     pool.query(sql, productID, function(err, rows, fields) {
         if(err) throw err;
-        console.log(rows);
-         res.send(rows);
+        //console.log(rows);
+        res.send(rows);
     })
 })
 
@@ -125,7 +123,7 @@ app.get("/api/removeAdmin", function(req, res) {
     let sqlParam = [req.query.value];
     pool.query(sql, sqlParam, function (err, rows, fields) {
         if (err) throw err;
-        console.log(rows);
+        //console.log(rows);
      });
 })
 
@@ -136,7 +134,7 @@ app.get("/api/removeFavorite", function(req, res) {
     let sqlParam = [req.query.value];
     pool.query(sql, sqlParam, function (err, rows, fields) {
         if (err) throw err;
-        console.log(rows);
+        //console.log(rows);
      });
 })
 
@@ -150,9 +148,9 @@ app.get("/api/removeProduct", function(req, res) {
         if (err) throw err;
         pool.query(sql2, sqlParam, function(err, rows, fields) {
             if(err) throw err
-            console.log(rows);
+            //console.log(rows);
         })
-        
+
      });
 })
 
@@ -163,7 +161,7 @@ app.get("/api/updateProducts", isAuthenticated, function(req, res) {
     console.log(sqlParam)
     pool.query(sql, sqlParam, function (err, rows, fields) {
         if (err) throw err;
-        console.log(rows);
+        //console.log(rows);
         res.render("tableUpdated");
      });
 });
@@ -172,19 +170,19 @@ app.get("/api/updateProducts", isAuthenticated, function(req, res) {
 app.get("/api/updateAdmins", async function(req, res){
     let plainPw = req.query.password;
     let hashedPwd = await hashPwd(plainPw);
-    console.log(hashedPwd);
+    //console.log(hashedPwd);
     let sql = "INSERT INTO admin (username, password) VALUES (?,?)";
     let sqlParams = [req.query.username, hashedPwd];
     pool.query(sql, sqlParams, function (err, rows, fields) {
       if(err){  //we make sure theres an error (error obj)
-        if(err.errno==1062){   
+        if(err.errno==1062){
             return res.render('addAdmin',{"loginError":true});
             }
         else{
             throw err;
             }
       }
-      console.log(rows);
+      //console.log(rows);
       res.render("tableUpdated");
     });
 });//api/updateAdmins
@@ -198,15 +196,15 @@ app.get("/api/addProducts", function(req, res){
     let quantity = req.query.quantity;
     let sql2 = "INSERT INTO Inventory(product_id, quantity) VALUES (?,?)"
     pool.query(sql, sqlParams, function (err, rows, fields) {
-        if(err){ 
-            if(err.errno==1062){   
+        if(err){
+            if(err.errno==1062){
                 return res.render('addProduct',{"loginError":true});
                 }
             else{
                 throw err;
                 }
           }
-            console.log(rows);
+            //console.log(rows);
             pool.query(getID, function(err, rows, fields){
                 if (err) throw err;
                 let sqlParams2 =[rows[0].id,quantity]
@@ -214,7 +212,7 @@ app.get("/api/addProducts", function(req, res){
                     if (err) throw err;
                      res.render("tableUpdated");
                 })
-               
+
           })
       });
 });//api/updateProducts
@@ -228,11 +226,44 @@ app.get("/api/updateInventory", function(req, res){
 
   pool.query(sql, sqlParams, function (err, rows, fields) {
     if (err) throw err;
-    console.log(rows);
+    //console.log(rows);
     res.render("tableUpdated");
   });
 });//api/updateInventory
 
+
+//APIs TO SHOW STATISTICS
+
+//Show Stock by Manufacturer
+app.get("/api/stockByMan", function(req, res){
+    let sql = "SELECT   product.manufacturer AS 'manufacturer' , COUNT(*) AS 'stock' FROM product GROUP BY product.manufacturer";
+    pool.query(sql, function(err, rows, fields) {
+        if (err) throw err;
+        //console.log(rows)
+        res.send(rows)
+    })
+})
+
+
+//Show Value by type in Stock
+app.get("/api/priceByType", function(req, res){
+    let sql = "SELECT  product.type AS 'productType', SUM(product.price)*Inventory.quantity AS 'priceTotal' FROM product JOIN Inventory ON product.id = Inventory.product_id GROUP BY product.type ";
+    pool.query(sql, function(err, rows, fields) {
+        if (err) throw err;
+        //console.log(rows)
+        res.send(rows)
+    })
+})
+
+//Show product in stock by Type
+app.get("/api/productsInStockByType", function(req, res){
+    let sql = "SELECT  product.type AS 'productType', SUM(Inventory.quantity) AS 'total' FROM product JOIN Inventory ON product.id = Inventory.product_id GROUP BY product.type  ";
+    pool.query(sql, function(err, rows, fields) {
+        if (err) throw err;
+        //console.log(rows)
+        res.send(rows)
+    })
+})
 
 //start server
 app.listen(process.env.PORT, process.env.IP, function(){
@@ -245,22 +276,23 @@ app.listen(process.env.PORT, process.env.IP, function(){
 //compares password entered to given hashed value
  function checkPassword(password, hashedValue){
      return new Promise( function(resolve, reject){
-       
+
          bcrypt.compare(password, hashedValue, function(err,res){
-             console.log("Result: "+ res);
+             if (err) throw err
+             //console.log("Result: "+ res);
              resolve(res);
          });
      });
  }
- 
+
 
 //hashes given password
 function hashPwd(plainPw){
-    
+
     return new Promise(function(resolve,reject){
         const salt = bcrypt.genSaltSync(saltRounds);
         const hash = bcrypt.hashSync(plainPw, salt);
-        console.log(hash)
+        //console.log(hash)
         resolve(hash);
     })
 }
@@ -297,7 +329,7 @@ app.get("/search",  function(req, res) {
      if (err) throw err;
      console.log(rows);
      res.render("adminpage" , {"rows":rows});
-  });  
+  });
 });//search
 
 app.get("/admins",  function(req, res) {
@@ -306,7 +338,7 @@ app.get("/admins",  function(req, res) {
      if (err) throw err;
      console.log(rows);
      res.render("admins" , {"rows":rows});
-  });  
+  });
 });//search
 app.get("/favorites",  function(req, res) {
   let sql = "SELECT product.make FROM favorites JOIN product WHERE product.id = favorites.product_id";
@@ -314,7 +346,7 @@ app.get("/favorites",  function(req, res) {
      if (err) throw err;
      console.log(rows);
      res.render("favorites" , {"rows":rows});
-  });  
+  });
 });//search
 app.get("/inventory",  function(req, res) {
   let sql = "SELECT product.make, Inventory.quantity FROM Inventory JOIN product WHERE product.id = Inventory.product_id";
@@ -322,6 +354,6 @@ app.get("/inventory",  function(req, res) {
      if (err) throw err;
      console.log(rows);
      res.render("inventory" , {"rows":rows});
-  });  
+  });
 });//search
 **/
