@@ -34,6 +34,10 @@ app.get("/login", function(req, res){
     res.render("login");
 });
 
+app.get("/cart", function(req, res){
+    res.render("cart");
+});
+
 //Admin login POST check route
 app.post("/login", async function(req,res){
     let username = req.body.username;

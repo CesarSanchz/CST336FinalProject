@@ -112,7 +112,7 @@ $('#showFavorites').on('click',function(){
         })//ajax
     }
     
-    function stockByMan(){
+   function stockByMan(){
         $.ajax({
             mehtod: "get",
             url: "/api/stockByMan",
