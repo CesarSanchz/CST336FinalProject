@@ -47,7 +47,7 @@ $('#showFavorites').on('click',function(){
           alert("DatabaseUpdated");
           let adminID =(this).value;
           removeAdmin(adminID);
-          window.location.href=window.location.href
+          window.location.href=window.location.href;
        }
    });
        
