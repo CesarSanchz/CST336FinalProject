@@ -2,7 +2,7 @@
 const express = require("express");
 const app = express();
 const request = require("request");
-const session = require('express-session')
+const session = require('express-session');
 const pool = require("./dbPool.js");
 const bcrypt = require('bcrypt');
 var loggedUser= "";
@@ -10,7 +10,7 @@ const saltRounds = 10;
 
 
 //Express use and set declarations
-app.set("view engine" , "ejs")
+app.set("view engine" , "ejs");
 
 app.use(express.static("public"));
 
@@ -32,6 +32,10 @@ app.get("/", function(req, res){
 //Admin Login Get Route
 app.get("/login", function(req, res){
     res.render("login");
+});
+
+app.get("/catalog", function(req, res){
+    res.render("catalog");
 });
 
 app.get("/cart", function(req, res){
@@ -56,12 +60,12 @@ app.post("/login", async function(req,res){
 
     if (passwordMatch){
         req.session.authenticated = true;
-        loggedUser = username
-       res.redirect("/adminpage")
+        loggedUser = username;
+       res.redirect("/adminpage");
     } else {
         res.render("login", {"loginError":true});
     }
-})
+});
 
 //Admin Logout route
 app.get("/logout", function(req, res){
@@ -93,33 +97,46 @@ app.get("/adminpage", isAuthenticated, function(req,res){
             });
         });
     });
-})
+});
 
 
 //route to page to add admin
 app.get("/addAdmin", isAuthenticated, function(req, res) {
   res.render("addAdmin");
-})
+});
 
 //route to page to add product
 app.get("/addProduct", isAuthenticated, function(req, res) {
   res.render("addProduct");
-})
+});
+
+
 
 //API to extract product information from database
 app.get("/api/getProductInfo" , isAuthenticated,function(req, res) {
     let username = loggedUser;
-    let productID = [req.query.value]
-    let sql ="SELECT * from product WHERE id = ?"
+    let productID = [req.query.value];
+    let sql ="SELECT * from product WHERE id = ?";
     pool.query(sql, productID, function(err, rows, fields) {
         if(err) throw err;
         //console.log(rows);
         res.send(rows);
-    })
-})
+    });
+});
 
 
 /////DATABASE UPDATE ROUTES/////
+
+//API TO RETRIEVE ALL INFO FROM DB
+app.get("/api/getAllProduct" , function(req, res) {
+    let sql ="SELECT * from product";
+    pool.query(sql, function(err, rows, fields) {
+        if(err) throw err;
+        //console.log(rows);
+        res.send(rows);
+    });
+});
+
 
 //API to remove admin data from database
 app.get("/api/removeAdmin", function(req, res) {
@@ -129,7 +146,7 @@ app.get("/api/removeAdmin", function(req, res) {
         if (err) throw err;
         //console.log(rows);
      });
-})
+});
 
 
 //API to remove favorites data from database
@@ -140,29 +157,29 @@ app.get("/api/removeFavorite", function(req, res) {
         if (err) throw err;
         //console.log(rows);
      });
-})
+});
 
 
 //API to remove product from database
 app.get("/api/removeProduct", function(req, res) {
     let sql2 = "DELETE FROM product WHERE id = ?";
     let sqlParam = [req.query.value];
-    let sql = "DELETE FROM Inventory WHERE product_id = ?"
+    let sql = "DELETE FROM Inventory WHERE product_id = ?";
     pool.query(sql, sqlParam, function (err, rows, fields) {
         if (err) throw err;
         pool.query(sql2, sqlParam, function(err, rows, fields) {
-            if(err) throw err
+            if(err) throw err;
             //console.log(rows);
-        })
+        });
 
      });
-})
+});
 
 //API to update selected product
 app.get("/api/updateProducts", isAuthenticated, function(req, res) {
-    let sql = "UPDATE product SET make = ?, model = ?, manufacturer = ?, type = ?, price = ?, description = ?, pictureURL = ? WHERE make = ?"
+    let sql = "UPDATE product SET make = ?, model = ?, manufacturer = ?, type = ?, price = ?, description = ?, pictureURL = ? WHERE make = ?";
     let sqlParam = [req.query.make, req.query.model, req.query.manufacturer, req.query.type, req.query.price, req.query.description, req.query.pictureURL, req.query.make];
-    console.log(sqlParam)
+    console.log(sqlParam);
     pool.query(sql, sqlParam, function (err, rows, fields) {
         if (err) throw err;
         //console.log(rows);
@@ -196,9 +213,9 @@ app.get("/api/updateAdmins", async function(req, res){
 app.get("/api/addProducts", function(req, res){
     let sql = "INSERT INTO product (make, model, manufacturer, type, price, description, pictureURL) VALUES (?,?,?,?,?,?,?)";
     let sqlParams = [req.query.make, req.query.model, req.query.manufacture, req.query.type, req.query.price, req.query.description, req.query.pictureURL];
-    let getID = "SELECT id from product ORDER BY id DESC LIMIT 1;"
+    let getID = "SELECT id from product ORDER BY id DESC LIMIT 1;";
     let quantity = req.query.quantity;
-    let sql2 = "INSERT INTO Inventory(product_id, quantity) VALUES (?,?)"
+    let sql2 = "INSERT INTO Inventory(product_id, quantity) VALUES (?,?)";
     pool.query(sql, sqlParams, function (err, rows, fields) {
         if(err){
             if(err.errno==1062){
@@ -211,13 +228,13 @@ app.get("/api/addProducts", function(req, res){
             //console.log(rows);
             pool.query(getID, function(err, rows, fields){
                 if (err) throw err;
-                let sqlParams2 =[rows[0].id,quantity]
+                let sqlParams2 =[rows[0].id,quantity];
                 pool.query(sql2, sqlParams2, function(err, rows, fields) {
                     if (err) throw err;
                      res.render("tableUpdated");
-                })
+                });
 
-          })
+          });
       });
 });//api/updateProducts
 
@@ -244,9 +261,9 @@ app.get("/api/stockByMan", function(req, res){
     pool.query(sql, function(err, rows, fields) {
         if (err) throw err;
         //console.log(rows)
-        res.send(rows)
-    })
-})
+        res.send(rows);
+    });
+});
 
 
 //Show Value by type in Stock
@@ -255,9 +272,9 @@ app.get("/api/priceByType", function(req, res){
     pool.query(sql, function(err, rows, fields) {
         if (err) throw err;
         //console.log(rows)
-        res.send(rows)
-    })
-})
+        res.send(rows);
+    });
+});
 
 //Show product in stock by Type
 app.get("/api/productsInStockByType", function(req, res){
@@ -265,9 +282,9 @@ app.get("/api/productsInStockByType", function(req, res){
     pool.query(sql, function(err, rows, fields) {
         if (err) throw err;
         //console.log(rows)
-        res.send(rows)
-    })
-})
+        res.send(rows);
+    });
+});
 
 //start server
 app.listen(process.env.PORT, process.env.IP, function(){
@@ -282,7 +299,7 @@ app.listen(process.env.PORT, process.env.IP, function(){
      return new Promise( function(resolve, reject){
 
          bcrypt.compare(password, hashedValue, function(err,res){
-             if (err) throw err
+             if (err) throw err;
              //console.log("Result: "+ res);
              resolve(res);
          });
@@ -298,7 +315,7 @@ function hashPwd(plainPw){
         const hash = bcrypt.hashSync(plainPw, salt);
         //console.log(hash)
         resolve(hash);
-    })
+    });
 }
 
 //Checks if admin is logged in if not loads login page
@@ -313,14 +330,14 @@ function isAuthenticated(req,res,next){
 
 //Checks if given variable exissts in database
  function checkUsername(username){
-     let sql = "SELECT * FROM admin WHERE username = ?"
+     let sql = "SELECT * FROM admin WHERE username = ?";
      return new Promise(function(resolve, reject){
              pool.query(sql,[username], function(err, rows,fields){
                  if(err) throw err;
                  //console.log("Rows found: " + rows.length);
                  resolve(rows);
              });//query
-     })//promise
+     });//promise
  }
 
 
