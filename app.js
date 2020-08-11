@@ -140,7 +140,7 @@ app.get("/api/getAllProduct" , function(req, res) {
 //API TO RETRIEVE ALL INFO FROM DB
 app.get("/api/getAllProduct" , function(req, res) {
     
-    let query = "SELECT * from gtrd6sxb06uq8uv6.product";
+    let query = "SELECT * from gnqplc28tnyarsjk.product";
     let params = [];
     //let paramSql = [req.query.make, req.query.manufacturer, req.query.partType];
     let make = req.query.make;
