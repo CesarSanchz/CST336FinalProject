@@ -137,6 +137,35 @@ app.get("/api/getAllProduct" , function(req, res) {
     });
 });
 
+//API TO RETRIEVE ALL INFO FROM DB
+app.get("/api/getAllProduct" , function(req, res) {
+    
+    let query = "SELECT * from gtrd6sxb06uq8uv6.product";
+    let params = [];
+    //let paramSql = [req.query.make, req.query.manufacturer, req.query.partType];
+    let make = req.query.make;
+    let partType = req.query.partType;
+    let manufacturer = req.query.manufacturer;
+    if (partType) {
+      params.push("type LIKE '%".concat(partType) + "%'");
+    }
+    if (manufacturer) {
+      params.push("manufacturer LIKE '%".concat(manufacturer) + "%'");
+    }
+    if (make) {
+      params.push("make LIKE '%".concat(make) + "%'");
+    }
+    if (params.length > 0) {
+      query = query.concat(" WHERE ", params.join(" AND "));
+    }
+    console.log("query is: ", query);
+    pool.query(query, function(err, rows, fields) {
+        if (err) err;
+        console.log("Rows: ", rows);
+        res.send(rows);
+    });
+});
+//END OF API TO RETRIEVE ALL INFO FROM DB
 
 //API to remove admin data from database
 app.get("/api/removeAdmin", function(req, res) {
