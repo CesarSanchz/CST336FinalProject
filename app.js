@@ -129,18 +129,8 @@ app.get("/api/getProductInfo" , isAuthenticated,function(req, res) {
 
 //API TO RETRIEVE ALL INFO FROM DB
 app.get("/api/getAllProduct" , function(req, res) {
-    let sql ="SELECT * from product";
-    pool.query(sql, function(err, rows, fields) {
-        if(err) throw err;
-        //console.log(rows);
-        res.send(rows);
-    });
-});
-
-//API TO RETRIEVE ALL INFO FROM DB
-app.get("/api/getAllProduct" , function(req, res) {
     
-    let query = "SELECT * from gnqplc28tnyarsjk.product";
+    let query = "SELECT * from product";
     let params = [];
     //let paramSql = [req.query.make, req.query.manufacturer, req.query.partType];
     let make = req.query.make;
