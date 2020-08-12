@@ -1,0 +1,16 @@
+body {
+	text-align: center;
+}
+
+table {
+	margin: auto;
+}
+
+th, tr, td {
+	border: 1px solid lightgray;
+	padding: 3px;
+}
+
+.error {
+	color: red;
+}
