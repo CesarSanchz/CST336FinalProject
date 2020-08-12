@@ -2,15 +2,10 @@ body {
 	text-align: center;
 }
 
-table {
-	margin: auto;
+.copyright {
+	text-align: right;
 }
 
-th, tr, td {
-	border: 1px solid lightgray;
-	padding: 3px;
-}
-
-.error {
-	color: red;
+.navbar {
+     border-radius: 10px;
 }
