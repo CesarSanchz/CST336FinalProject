@@ -6,22 +6,22 @@
         <h2 Using STYLE="text-transform:capitalize" >Welcome Admin  <%=username %>!</h2>
         
         <form action="/logout">
-            <button>
+            <button  class="btn btn-success">
                 Logout
             </button>
         </form>
         
         <br><br>
         
-        <form action="/addAdmin"><button>Add a new Admin</button></form>
+        <form action="/addAdmin"><button class="btn btn-info">Add a new Admin</button></form>
         
         <br>
         
-        <form action="/addProduct"><button>Add a new Product</button></form>
+        <form action="/addProduct"><button class="btn btn-info">Add a new Product</button></form>
         
-        <br><br>
+        <br>
         
-        <button id ="showAdmins">Admin Information</button>
+        <button id ="showAdmins" class="btn btn-info">Admin Information</button>
         
         <!--Admin table is hidden until button is clicked -->
         <div class="container">
@@ -38,7 +38,7 @@
                     <%rows2.forEach(function(row, i){ %>
                     <td><%= row["id"] %></td>
                     <td><%= row["username"] %></td>
-                    <td><button class = "removeAdmin" value = <%= row["id"] %>>Remove</button></td>
+                    <td><button class = "removeAdmin btn btn-danger" value = <%= row["id"] %>>Remove</button></td>
                     
                 </tr>
                     <% });%>
@@ -46,9 +46,9 @@
         </div>
         </div>
         
-        <br><br>
+        <br>
         
-        <button id ="showFavorites">Favorites Information</button>
+        <button id ="showFavorites"  class="btn btn-info" >Favorites Information</button>
         
          <!--Favorites table is hidden until button is clicked -->
          <div class="container">
@@ -64,15 +64,15 @@
                     <%rows3.forEach(function(row, i){ %>
                     <td><%= row["id"] %></td>
                     <td><%= row["make"] %></td>
-                    <td><button class = "removeFavorite" value = <%= row["id"] %>>Remove</button></td>
+                    <td><button class = "removeFavorite btn btn-danger" value = <%= row["id"] %>>Remove</button></td>
                 </tr>
                     <% });%>
             </table>
         </div>
         </div>
     
-        <br><br>
-        <button id="showInventory">Inventory Information</button>
+        <br>
+        <button id="showInventory"  class="btn btn-info">Inventory Information</button>
         
         <!--Invenotry table is hidden until button is clicked -->
         <div class="container">
@@ -95,9 +95,9 @@
         </div>
         </div>
 
-        <br><br>
-        <button id="showProducts">Products Information</button>
-        <br><br>
+        <br>
+        <button id="showProducts"  class="btn btn-info" >Products Information</button>
+        <br>
         
         <!--Product table is hidden until button is clicked -->
         <div class="container">
@@ -124,8 +124,8 @@
                     <td> <%= row["type"] %></td>
                     <td> <%= row["price"] %></td>
                     <td> <img src =<%= row["pictureURL"]%> alt= <%= row["model"] %> width="200" height="200"></td>
-                    <td><button class = "removeProduct" value = <%= row["id"] %>>Remove</button></td>
-                    <td><button class = "changeProduct" value = <%= row["id"] %>>Update</button></td>
+                    <td><button class = "removeProduct  btn btn-danger" value = <%= row["id"] %>>Remove</button></td>
+                    <td><button class = "changeProduct  btn btn-warning" value = <%= row["id"] %>>Update</button></td>
                 </tr>
                 <% });%>
             </table>
@@ -146,7 +146,7 @@
                     <input id = "description" type="text" placeholder = "Type description" name ="description" required/>
                     <input id ="pictureURL"type="text" placeholder = "Type pictureURL" name ="pictureURL" required/>
                     <br><br>
-                    <button>Update</button>
+                    <button class="btn btn-warning">Update</button>
                 </form>
             
             </div>
@@ -157,7 +157,7 @@
                 <input type="number" placeholder = "Product Number" name ="product_id" min="1" max="100" required/>
                 <input type="number" placeholder = "Quantity" name ="quantity" min="0" max="100" required/>
                 <br><br>
-                <button>Update</button>
+                <button class="btn btn-warning">Update</button>
             </form>
             
         </div>
@@ -165,7 +165,7 @@
         <br>
         
         
-        <button id="statistics">The Tech Guys Store Statistics</button>
+        <button id="statistics" class="btn btn-info">The Tech Guys Store Statistics</button>
         
         
          <!--All tables are hidden until button is clicked -->

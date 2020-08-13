@@ -43,7 +43,7 @@ $(document).ready(function() {
             "<td>" + response[i].manufacturer + "</td> " +
             "<td>" + response[i].type + "</td> " +
             "<td id='productPrice' >" + response[i].price + "</td> " +
-            "<td><button class ='addCart' value ='" + response[i].id + "'> Add to Cart </td>" +
+            "<td><button class ='addCart btn btn-primary' value ='" + response[i].id + "'> Add to Cart </td>" +
             "</tr>"
           );
         }
