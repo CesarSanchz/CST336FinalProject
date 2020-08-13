@@ -1,17 +1,87 @@
 /* global $ */ /* global localStorage */ /* global location */
 $(document).ready(function() {
+  $(document).on("click", ".item1Button", function(e) {
+    let itemID = $('#favoriteItemId1').text();
+    console.log("Adding the first favorite to the cart.." + itemID);
+
+    var addToLocalStorageArray = function(name, value) {
+
+      // Get the existing data
+      var existing = localStorage.getItem("productID");
+
+      // If no existing data, create an array
+      // Otherwise, convert the localStorage string to an array
+      existing = existing ? existing.split(',') : [];
+
+      // Add new data to localStorage Array
+      existing.push(itemID);
+
+      // Save back to localStorage
+      localStorage.setItem("productID", existing.toString());
+
+    };
+    addToLocalStorageArray();
+  });
+  
+  $(document).on("click", ".item2Button", function(e) {
+    let itemID = $('#favoriteItemId2').text();
+    console.log("Adding the first favorite to the cart.." + itemID);
+
+    var addToLocalStorageArray = function(name, value) {
+
+      // Get the existing data
+      var existing = localStorage.getItem("productID");
+
+      // If no existing data, create an array
+      // Otherwise, convert the localStorage string to an array
+      existing = existing ? existing.split(',') : [];
+
+      // Add new data to localStorage Array
+      existing.push(itemID);
+
+      // Save back to localStorage
+      localStorage.setItem("productID", existing.toString());
+
+    };
+    addToLocalStorageArray();
+  });
+  
+  $(document).on("click", ".item3Button", function(e) {
+    let itemID = $('#favoriteItemId3').text();
+    console.log("Adding the first favorite to the cart.." + itemID);
+
+    var addToLocalStorageArray = function(name, value) {
+
+      // Get the existing data
+      var existing = localStorage.getItem("productID");
+
+      // If no existing data, create an array
+      // Otherwise, convert the localStorage string to an array
+      existing = existing ? existing.split(',') : [];
+
+      // Add new data to localStorage Array
+      existing.push(itemID);
+
+      // Save back to localStorage
+      localStorage.setItem("productID", existing.toString());
+
+    };
+    addToLocalStorageArray();
+  });
+  
   $(document).on("click", ".addCart", function(e) {
     e.preventDefault();
     //document.querySelector('tableInfo'), 
     //document.querySelector('cartContent tbody');
     console.log("Course added");
-    let product = e.target.parentElement.parentElement.parentElement;
+    let product, productInfo = null; //<--testing setting to null to see if the value can be reset..
+    product = e.target.parentElement.parentElement.parentElement;
     console.log("printing product: ", product);
-    let productInfo = {
+    productInfo = {
       id: product.querySelector('#productID').textContent,
-      image: product.querySelector('#productImage').alt,
-      title: product.querySelector('#productTitle').textContent,
-      price: product.querySelector('#productPrice').textContent
+      // image: product.querySelector('#productImage').alt,
+      // title: product.querySelector('#productTitle').textContent,
+      // price: product.querySelector('#productPrice').textContent
     };
     // console.log("Product info", productInfo);
     // insert productID into favorites here..
@@ -34,6 +104,7 @@ $(document).ready(function() {
 
     };
     addToLocalStorageArray();
+    // location.reload (); //reloads page...
     //console.log(localStorage.getItem("productID").length);
   });
   
