@@ -24,7 +24,8 @@
         <button id ="showAdmins">Admin Information</button>
         
         <!--Admin table is hidden until button is clicked -->
-        <div id="admins" style="display: none">
+        <div class="container">
+        <div id="admins" style="display: none" align="center">
             <h2>Admins</h2>
             <table>
                 <tr>
@@ -43,13 +44,15 @@
                     <% });%>
             </table>
         </div>
+        </div>
         
         <br><br>
         
         <button id ="showFavorites">Favorites Information</button>
         
          <!--Favorites table is hidden until button is clicked -->
-        <div id="favorites" style="display: none">
+         <div class="container">
+        <div id="favorites" style="display: none" align="center">
              <h2>Favorites</h2>
             <table>
                 <tr>
@@ -66,12 +69,14 @@
                     <% });%>
             </table>
         </div>
+        </div>
     
         <br><br>
         <button id="showInventory">Inventory Information</button>
         
         <!--Invenotry table is hidden until button is clicked -->
-        <div id="inventory"  style="display: none">
+        <div class="container">
+        <div id="inventory"  style="display: none" align="center">
              <h2>Inventory</h2>
             <table>
                 <tr>
@@ -88,13 +93,15 @@
                 <% });%>
             </table>
         </div>
+        </div>
 
         <br><br>
         <button id="showProducts">Products Information</button>
         <br><br>
         
         <!--Product table is hidden until button is clicked -->
-        <div id="products" style="display: none">
+        <div class="container">
+        <div id="products" style="display: none" align="center">
              <h2>Products</h2>
             <table>
                 <tr>
@@ -122,10 +129,11 @@
                 </tr>
                 <% });%>
             </table>
+            
         
 
               <!--Form is hidden until button is clicked -->
-            <div id="updateProductFrom" style="display: none">
+            <div id="updateProductFrom" style="display: none" align="center">
                 
                 <h2>Update Product</h2>  
                 
@@ -153,6 +161,7 @@
             </form>
             
         </div>
+        </div>
         <br>
         
         
@@ -160,7 +169,8 @@
         
         
          <!--All tables are hidden until button is clicked -->
-        <div id ="staticsTables" style="display: none">
+    <div class="container">
+        <div id ="staticsTables" style="display: none" align="center">
             <h3>Stock by Manufacturer</h3>
             <table id = "stockByMan">
                 <tr>
@@ -187,6 +197,7 @@
                 </tr>
             </table>
         </div>
+    </div>
         <br><br>
     </main>
 <%- include ('partials/footer.ejs') %>
