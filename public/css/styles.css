@@ -17,6 +17,7 @@ body {
 
 .favoriteItemContainer{
 	display: flex;
+	padding: 100px;
 }
 
 .favoriteItem {
@@ -24,7 +25,7 @@ body {
 	padding: 20px;
 	border: 2px solid blue;
 	border-radius: 15px;
-	margin-right: 10px;
-    margin-left: 10px;
+	margin-right: 50px;
+    margin-left: 50px;
     background: #d3e9fe;
 }

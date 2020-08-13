@@ -121,6 +121,7 @@ app.get("/api/getFavorites", function(req, res){
     if (err) throw err;
     res.send(rows);
   });
+  
 });//api/getFavorites
 
 //product information from database
@@ -133,12 +134,11 @@ app.get("/api/getProductInfo" , isAuthenticated,function(req, res) {
         //console.log(rows);
         res.send(rows);
     });
-});
+});//product information
 
 
 //API TO RETRIEVE ALL INFO FROM DB
 app.get("/api/getAllProduct" , function(req, res) {
-    
     let query = "SELECT * from product";
     let params = [];
     //let paramSql = [req.query.make, req.query.manufacturer, req.query.partType];
@@ -171,7 +171,7 @@ app.get("/api/getProductID", function(req, res){
     let sql = "SELECT make, pictureURL, price FROM product WHERE id = ?";
     let sqlParam = [req.query.id];
     //let sqlParam = 1;
-    console.log("SqlParams: ", sqlParam);
+    // console.log("SqlParams: ", sqlParam);
     pool.query(sql, sqlParam, function (err, rows, fields) {
         if (err) throw err;
         // console.log("rows :", rows);
@@ -211,7 +211,7 @@ app.get("/api/addFavorite", function(req, res) {
     console.log("SQL: "+sql+" PARAMS: "+sqlParam);
     // pool.query(sql, sqlParam, function (err, rows, fields) {
     //     if (err) throw err;
-    //     //console.log(rows);
+    //     console.log(rows);
     //  });
 }); //add favorite
 

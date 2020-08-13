@@ -5,17 +5,17 @@ $(document).ready(function() {
     //document.querySelector('tableInfo'), 
     //document.querySelector('cartContent tbody');
     console.log("Course added");
-    const product = e.target.parentElement.parentElement.parentElement;
+    let product = e.target.parentElement.parentElement.parentElement;
     console.log("printing product: ", product);
-    const productInfo = {
+    let productInfo = {
       id: product.querySelector('#productID').textContent,
       image: product.querySelector('#productImage').alt,
       title: product.querySelector('#productTitle').textContent,
       price: product.querySelector('#productPrice').textContent
     };
-    console.log("Product info", productInfo);
+    // console.log("Product info", productInfo);
     // insert productID into favorites here..
-    console.log("adding to favorites..");
+    // console.log("adding to favorites..");
     addFavorite(productInfo);
     var addToLocalStorageArray = function(name, value) {
 
@@ -38,7 +38,18 @@ $(document).ready(function() {
   });
   
   function addFavorite(productInformation){
-    console.log("Adding "+ productInformation);
+    console.log("Adding "+ productInformation.id);
+    $.ajax({
+      method: "GET",
+      url: "/api/addFavorite",
+      dataType: "json",
+      data: {
+        "value": productInformation.id,
+      },
+      success: function(response) {
+        console.log(response);
+      }
+    });
   }
 
   function displayCart() {
