@@ -24,9 +24,10 @@ app.use(express.urlencoded({extended: true}));
 
 //ROUTES
 
-//TODO THIS ROUTE SHOULD BE THE LANDING PAGE ROUTE <- DANIEL
+// Home page
 app.get("/", function(req, res){
     res.render("index");
+    console.log("Opening root..");
 });
 
 //Admin Login Get Route
@@ -111,6 +112,15 @@ app.get("/addProduct", isAuthenticated, function(req, res) {
 });
 
 
+//////////////////////////// API ACCESS ///////////////////////////////////////
+
+app.get("/api/getFavorites", function(req, res){
+  let sql = "SELECT * FROM product INNER JOIN favorites ON product.id = favorites.product_id;";
+  pool.query(sql, function (err, rows) {
+    if (err) throw err;
+    res.send(rows);
+  });
+});//api/getFavorites
 
 //API to extract product information from database
 app.get("/api/getProductInfo" , isAuthenticated,function(req, res) {
@@ -380,14 +390,7 @@ app.get("/admins",  function(req, res) {
      res.render("admins" , {"rows":rows});
   });
 });//search
-app.get("/favorites",  function(req, res) {
-  let sql = "SELECT product.make FROM favorites JOIN product WHERE product.id = favorites.product_id";
-  pool.query(sql, function (err, rows, fields) {
-     if (err) throw err;
-     console.log(rows);
-     res.render("favorites" , {"rows":rows});
-  });
-});//search
+
 app.get("/inventory",  function(req, res) {
   let sql = "SELECT product.make, Inventory.quantity FROM Inventory JOIN product WHERE product.id = Inventory.product_id";
   pool.query(sql, function (err, rows, fields) {
