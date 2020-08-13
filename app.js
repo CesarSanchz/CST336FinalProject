@@ -166,6 +166,20 @@ app.get("/api/getAllProduct" , function(req, res) {
 });
 //END OF API TO RETRIEVE ALL INFO FROM DB
 
+//API to RETRIEVE ID
+app.get("/api/getProductID", function(req, res){
+    let sql = "SELECT make, pictureURL, price FROM product WHERE id = ?";
+    let sqlParam = [req.query.id];
+    //let sqlParam = 1;
+    console.log("SqlParams: ", sqlParam);
+    pool.query(sql, sqlParam, function (err, rows, fields) {
+        if (err) throw err;
+        console.log("rows :", rows);
+        res.send(rows);
+     });
+});
+//API to RETRIEVE ID
+
 
 /////DATABASE SET & UPDATE ROUTES/////
 

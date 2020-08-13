@@ -1,19 +1,26 @@
 <%- include ('partials/header.ejs') %>
 <body>
-    <h1>Shopping Cart</h1>    
-
-
-
-
-
-
-
-
-
-
-
-
-
+    <h1>Shopping Cart</h1>
+    <header id="header" class="header">
+        <div class="container">
+            <div id="shoppingCart">
+                    <table >
+                        <th>
+                            <tr>
+                                <th>Image</th>
+                                <th>Name</th>
+                                <th>Price</th>
+                                <th></th>
+                            </tr>
+                        </th>
+                        <tbody id="cartContent"></tbody>
+                    </table>
+            </div>
+            <br>
+            <button type="button" id="clearCart" class="btn btn-primary">Clear Cart</button>
+        </div>
+    </header>
+    
 
 
 <%- include ('partials/footer.ejs') %>
