@@ -14,6 +14,9 @@ $(document).ready(function() {
       price: product.querySelector('#productPrice').textContent
     };
     console.log("Product info", productInfo);
+    // insert productID into favorites here..
+    console.log("adding to favorites..");
+    addFavorite(productInfo);
     var addToLocalStorageArray = function(name, value) {
 
       // Get the existing data
@@ -44,6 +47,10 @@ $(document).ready(function() {
     //          );
     //  
   });
+  
+  function addFavorite(productInformation){
+    console.log("Adding "+ productInformation);
+  }
 
   function displayCart() {
     //let cartItems = localStorage.getItem('productID');

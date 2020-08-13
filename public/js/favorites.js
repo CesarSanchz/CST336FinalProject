@@ -1,6 +1,6 @@
 $(document).ready(function() {
-    console.log("starting favorites functions");
-    
+    // console.log("starting favorites functions");
+    // Function will populate the front index page with a list of three favorite items
     $.ajax({
        method:  "GET",
        url:     "/api/getFavorites",
@@ -20,15 +20,4 @@ $(document).ready(function() {
             $("#favoriteItemFoto3").html("<br><br><img src="+result[2].pictureURL+" alt='Computer Component' width='70' height='70'>");
        }
     });
-    
-    // <div id = "favoriteItem">
-    //     <h3>Product Type</h3>
-    //     <p>RAM</p>
-    //     <h3>Manufacturer</h3>
-    //     <p>Seagate</p>
-    //     <h4>Description</h4>
-    //     <p>An amazing product description goes here</p>
-    //     <img src="img/crucial.jpg" alt="Computer Component" width="70" height="70"><br><br>
-    //     <button class = "btnoutline">Add to cart</button>
-    // </div>
 });
