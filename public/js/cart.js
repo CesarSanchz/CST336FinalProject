@@ -36,19 +36,25 @@ $(document).ready(function() {
     addToLocalStorageArray();
     //console.log(localStorage.getItem("productID").length);
   });
-  
-  function addFavorite(productInformation){
-    console.log("Adding "+ productInformation);
+
+  function addFavorite(productInformation) {
+    console.log("Adding " + productInformation);
   }
 
   function displayCart() {
-    //let cartItems = localStorage.getItem('productID');
-    //console.log(JSON.parse(cartItems));
+    var total = 0;
     if (localStorage.getItem('productID')) {
       let inCart = localStorage.getItem('productID').split(',');
       console.log(inCart);
+      $("#cartContent").html(
+        "<table id='cartItems'>" +
+        "<tr>" +
+        "<th>Picture</th>" +
+        "<th>Name</th>" +
+        "<th>Price</th>" +
+        "</tr>"
+      );
       inCart.forEach(function(item, i) {
-        
         $.ajax({
           method: "GET",
           url: "/api/getProductID",
@@ -60,14 +66,20 @@ $(document).ready(function() {
             console.log("i :", i);
             console.log(response);
             console.log("Response item", response[0].make);
-            $("#cartContent").append(
+            $("#cartItems").append(
               '<tr>' +
-              '<td><img src="' + response[0].pictureURL+ '"width="100"></td>' +
+              '<td><img src="' + response[0].pictureURL + '"width="100"></td>' +
               '<td>' + response[0].make + '</td>' +
               '<td>' + response[0].price + '</td>' +
               '</tr>'
             );
+            total += response[0].price;
+            console.log("total :", total);
+            $("#cartItemsTotal").html(
+              "<h3>Total Price " + total + "</h3>"
+            );
           }
+
         });
         //$("#cartContent").append(
         //  '<tr>' +
@@ -76,13 +88,16 @@ $(document).ready(function() {
         //);
       });
 
+
     }
     else {
       $("#cartContent").html("Nothing in your cart");
     }
+
   }
-  //let cartItems = localStorage.getItem('productID');
-  //console.log(JSON.parse(cartItems));
+
+
+
   displayCart();
   $("#clearCart").on("click", function(e) {
     localStorage.clear();
