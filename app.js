@@ -208,13 +208,12 @@ app.get("/api/removeFavorite", function(req, res) {
 app.get("/api/addFavorite", function(req, res) {
     let sql = "INSERT INTO favorites(product_id) VALUES (?)";
     let sqlParam = [req.query.value];
-    console.log("SQL: "+sql+" PARAMS: "+sqlParam);
-    // pool.query(sql, sqlParam, function (err, rows, fields) {
-    //     if (err) throw err;
-    //     console.log(rows);
-    //  });
+    // console.log("SQL: "+sql+" PARAMS: "+sqlParam);
+    pool.query(sql, sqlParam, function (err, rows, fields) {
+        if (err) throw err;
+        // console.log(rows);
+     });
 }); //add favorite
-
 
 //API to remove product from database
 app.get("/api/removeProduct", function(req, res) {
@@ -227,7 +226,6 @@ app.get("/api/removeProduct", function(req, res) {
             if(err) throw err;
             //console.log(rows);
         });
-
      });
 });
 
