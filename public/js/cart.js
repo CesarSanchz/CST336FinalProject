@@ -75,10 +75,10 @@ $(document).ready(function() {
     //document.querySelector('cartContent tbody');
     console.log("Course added");
     let product, productInfo = null; //<--testing setting to null to see if the value can be reset..
-    product = e.target.parentElement.parentElement.parentElement;
+    product = e.target;
     console.log("printing product: ", product);
     productInfo = {
-      id: product.querySelector('#productID').textContent,
+      id: product.value,
       // image: product.querySelector('#productImage').alt,
       // title: product.querySelector('#productTitle').textContent,
       // price: product.querySelector('#productPrice').textContent
