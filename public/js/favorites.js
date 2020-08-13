@@ -9,6 +9,7 @@ $(document).ready(function() {
             let total = result.length;
             //   console.log("All results tallied  "+total);
             // Total is used to get the last 3 records as the table is growing, and it is never cleaned, this is useful for logging user clicks too.
+            $("#favoriteItemId1").html("<p>"+result[total-3].id+"</p>");
             $("#favoriteItemType1").html("<p>"+result[total-3].type+"</p>");
             $("#favoriteItemMan1").html("<p>"+result[total-3].manufacturer+"</p>");
             $("#favoriteItemDesc1").html("<p>"+result[total-3].description+"</p>");
