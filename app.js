@@ -27,7 +27,7 @@ app.use(express.urlencoded({extended: true}));
 // Home page
 app.get("/", function(req, res){
     res.render("index");
-    console.log("Opening root..");
+    // console.log("Opening root..");
 });
 
 //Admin Login Get Route
@@ -157,10 +157,10 @@ app.get("/api/getAllProduct" , function(req, res) {
     if (params.length > 0) {
       query = query.concat(" WHERE ", params.join(" AND "));
     }
-    console.log("query is: ", query);
+    // console.log("query is: ", query);
     pool.query(query, function(err, rows, fields) {
         if (err) err;
-        console.log("Rows: ", rows);
+        // console.log("Rows: ", rows);
         res.send(rows);
     });
 });
@@ -174,7 +174,7 @@ app.get("/api/getProductID", function(req, res){
     console.log("SqlParams: ", sqlParam);
     pool.query(sql, sqlParam, function (err, rows, fields) {
         if (err) throw err;
-        console.log("rows :", rows);
+        // console.log("rows :", rows);
         res.send(rows);
      });
 });
@@ -202,7 +202,18 @@ app.get("/api/removeFavorite", function(req, res) {
         if (err) throw err;
         //console.log(rows);
      });
-});
+}); //remove favorite
+
+//API to add favorites data from database
+app.get("/api/addFavorite", function(req, res) {
+    let sql = "INSERT INTO favorites(product_id) VALUES (?)";
+    let sqlParam = [req.query.value];
+    console.log("SQL: "+sql+" PARAMS: "+sqlParam);
+    // pool.query(sql, sqlParam, function (err, rows, fields) {
+    //     if (err) throw err;
+    //     //console.log(rows);
+    //  });
+}); //add favorite
 
 
 //API to remove product from database
