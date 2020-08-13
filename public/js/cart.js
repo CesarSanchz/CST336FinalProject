@@ -32,17 +32,6 @@ $(document).ready(function() {
     };
     addToLocalStorageArray();
     //console.log(localStorage.getItem("productID").length);
-
-    // $("#cartContent").append(
-    //     "<tr>" +
-    //          "<td><img src=" + productInfo.image + " width='100'></td>" +
-    //          "<td>" + productInfo.title + "</td>" +
-    //          "<td>"+ productInfo.price +"</td>" +
-    //          "<td> <a href='#' class='remove' data-id="+ ">X</a></td>"+
-    //          
-    //     "</tr>"
-    //          );
-    //  
   });
 
   function displayCart() {

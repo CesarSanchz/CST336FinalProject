@@ -19,35 +19,18 @@ $(document).ready(function() {
       },
       success: function(response) {
         // Validation for input field
-        $("#displayTable").append(
-          "<table>" +
-          "<tr>" +
-          "<th> ID </th>" +
-          "<th> Picture </th>" +
-          "<th> Make </th>" +
-          "<th> Model </th>" +
-          "<th> Manufacturer </th>" +
-          "<th> Type </th>" +
-          "<th> Price </th>" +
-          "</tr>" +
-          "</table>"
-        );
         for (var i = 0; i < response.length; i++) {
-          $("#displayTable").append(
-            "<div>" +
-            "<table>" +
+          $("#productPage").append(
             "<tr class='tableInfo' value='" + response[i].id + "'>" +
-            " <td><h3 id='productID'>" + response[i].id + "</h3></td> " +
-            " <td><img id='productImage' alt='" + response[i].pictureURL + "' src='" + response[i].pictureURL + "' width='200' height='200'></td>" +
-            " <td><h3 id='productTitle'>" + response[i].make + "</h3></td> " +
-            " <td><h3>" + response[i].model + "</h3></td> " +
-            " <td><h3>" + response[i].manufacturer + "</h3></td> " +
-            " <td><h3>" + response[i].type + "</h3></td> " +
-            " <td><h3 id='productPrice' >" + response[i].price + "</h3></td> " +
+            " <td id='productID'>" + response[i].id + "</td> " +
+            " <td> <img id='productImage' alt='" + response[i].pictureURL + "' src='" + response[i].pictureURL + "' width='200' height='200'></td>" +
+            " <td id='productTitle'>" + response[i].make + "</td> " +
+            " <td>" + response[i].model + "</td> " +
+            " <td>" + response[i].manufacturer + "</td> " +
+            " <td>" + response[i].type + "</td> " +
+            " <td id='productPrice' >" + response[i].price + "</td> " +
             "<td><button class ='addCart' value ='" + response[i].id + "'> Add to Cart </td>" +
-            "</tr>" +
-            "</table>" +
-            "</div>"
+            "</tr>"
           );
         }
 

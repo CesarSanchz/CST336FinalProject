@@ -23,23 +23,26 @@
         <button type="button" id="btnSearch" class="btn btn-primary">Search</button>
         <br><br>
         <span id="searchError"></span><br>
-        <div id="displayTable">
-            
+        <div class="container">
+            <div id="shoppingCart">
+                    <table >
+                        <th>
+                            <tr>
+                                <th>ID</th>
+                                <th>Picture</th>
+                                <th>Name</th>
+                                <th>Model</th>
+                                <th>Manufacturer</th>
+                                <th>Component</th>
+                                <th>Price</th>
+                                <th>Button</th>
+                            </tr>
+                        </th>
+                        <tbody id="productPage"></tbody>
+                    </table>
+            </div>
         </div>
     </main>
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 <%- include ('partials/footer.ejs') %>
