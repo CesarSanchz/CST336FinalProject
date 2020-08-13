@@ -9,7 +9,10 @@ body {
 
 .navbar {
      border-radius: 10px;
-     background: #2871cc;
+}
+
+.navbar-default {
+	background: #2871cc;
 }
 
 .favoriteItemContainer{

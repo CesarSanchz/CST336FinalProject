@@ -114,6 +114,7 @@ app.get("/addProduct", isAuthenticated, function(req, res) {
 
 //////////////////////////// API ACCESS ///////////////////////////////////////
 
+//get ENTIRE list of favorites
 app.get("/api/getFavorites", function(req, res){
   let sql = "SELECT * FROM product INNER JOIN favorites ON product.id = favorites.product_id;";
   pool.query(sql, function (err, rows) {
@@ -122,7 +123,7 @@ app.get("/api/getFavorites", function(req, res){
   });
 });//api/getFavorites
 
-//API to extract product information from database
+//product information from database
 app.get("/api/getProductInfo" , isAuthenticated,function(req, res) {
     let username = loggedUser;
     let productID = [req.query.value];
@@ -134,8 +135,6 @@ app.get("/api/getProductInfo" , isAuthenticated,function(req, res) {
     });
 });
 
-
-/////DATABASE UPDATE ROUTES/////
 
 //API TO RETRIEVE ALL INFO FROM DB
 app.get("/api/getAllProduct" , function(req, res) {
@@ -166,6 +165,9 @@ app.get("/api/getAllProduct" , function(req, res) {
     });
 });
 //END OF API TO RETRIEVE ALL INFO FROM DB
+
+
+/////DATABASE SET & UPDATE ROUTES/////
 
 //API to remove admin data from database
 app.get("/api/removeAdmin", function(req, res) {
