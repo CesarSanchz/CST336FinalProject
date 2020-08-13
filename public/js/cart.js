@@ -158,7 +158,7 @@ $(document).ready(function() {
             total += response[0].price;
             console.log("total :", total);
             $("#cartItemsTotal").html(
-              "<h3>Total Price $" + total + "</h3>"
+              "<h3>Total Price $" + total.toFixed(2) + "</h3>"
             );
           }
 
